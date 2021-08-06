@@ -14,7 +14,7 @@ public class TeseraUserCollectionGame {
 
 
     @Data
-    private static class Game {
+    public static class Game {
         private long teseraId;
     }
 }

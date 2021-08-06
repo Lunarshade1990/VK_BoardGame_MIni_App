@@ -1,6 +1,7 @@
 package com.lunarshade.vkapp.service.teseraService;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lunarshade.vkapp.service.TeseraService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ public class TeseraGetollectionInfoTest extends Assertions {
     TeseraService teseraService;
 
     @Test
-    void getUserCollectionListSuccessResponse () {
+    void getUserCollectionListSuccessResponse () throws JsonProcessingException {
         int size = 4;
         assertEquals(size, teseraService.getUserCollectionsInfo(username).getCollections().size());
     }
