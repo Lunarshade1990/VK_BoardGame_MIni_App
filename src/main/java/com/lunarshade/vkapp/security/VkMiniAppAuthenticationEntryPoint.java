@@ -23,7 +23,7 @@ public class VkMiniAppAuthenticationEntryPoint implements AuthenticationEntryPoi
         } else if (authException instanceof BadCredentialsException) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, authException.getMessage());
         } else if (authException instanceof UsernameNotFoundException) {
-            response.sendError(HttpServletResponse.SC_ACCEPTED, authException.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         }
     }
 }
