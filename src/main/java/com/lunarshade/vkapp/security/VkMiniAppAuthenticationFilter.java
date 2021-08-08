@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -16,6 +17,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class VkMiniAppAuthenticationFilter extends OncePerRequestFilter {
@@ -32,11 +35,23 @@ public class VkMiniAppAuthenticationFilter extends OncePerRequestFilter {
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
+    private final List<String> excludePatches = new ArrayList<>();
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
+
+
+        excludePatches.add("/auth");
+
+        if(excludePatches.stream().anyMatch(p -> antPathMatcher.match(p, request.getServletPath()))) {
+            chain.doFilter(request, response);
+            return;
+        }
+
 
         String sign = request.getHeader("authorization");
         if (sign == null || sign.isEmpty()) {

@@ -24,9 +24,9 @@ public class VkMiniappUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
-//        AppUser user = userService.getByProviderId(id);
+        AppUser user = userService.getByProviderId(id);
 
-//        if (user == null) throw new UsernameNotFoundException("User not found");
+        if (user == null) throw new UsernameNotFoundException("User not found");
 
         return User.builder()
                 .username("OK" + " " + "OK")
