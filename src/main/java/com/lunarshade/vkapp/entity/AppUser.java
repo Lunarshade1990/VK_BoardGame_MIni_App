@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
-@Entity
+@Entity(name = "user")
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class AppUser {
     private Set<Event> events;
     @Enumerated(EnumType.STRING)
     @ElementCollection
-    private Set<Roles> roles;
+    private List<Roles> roles;
     @JoinTable(name = "user_plays",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "plays_id"))
@@ -38,4 +39,7 @@ public class AppUser {
     @ManyToMany
     private Set<BoardGame> boardGames;
     private boolean active;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    private City city;
 }

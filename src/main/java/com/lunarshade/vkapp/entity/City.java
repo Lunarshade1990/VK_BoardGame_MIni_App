@@ -1,10 +1,16 @@
 package com.lunarshade.vkapp.entity;
 
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -13,6 +19,11 @@ import javax.persistence.Id;
 @RequiredArgsConstructor
 public class City {
     @Id
+    @GeneratedValue
     private long Id;
+    private long vkId;
     private String name;
+    @OneToMany
+    @ToString.Exclude
+    private Set<AppUser> users;
 }

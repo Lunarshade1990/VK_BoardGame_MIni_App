@@ -70,16 +70,19 @@ public class VkMiniAppAuthenticationFilter extends OncePerRequestFilter {
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                chain.doFilter(request, response);
-            }else throw new BadCredentialsException("Токен не прошёл валидацию");
+            }else {
+                throw new BadCredentialsException("Токен не прошёл валидацию");
+            }
         } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
             this.authenticationEntryPoint.commence(request, response, e);
             return;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            chain.doFilter(request, response);
         }
-        chain.doFilter(request, response);
+
     }
 
 

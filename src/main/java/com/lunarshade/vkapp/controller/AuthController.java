@@ -1,5 +1,6 @@
 package com.lunarshade.vkapp.controller;
 
+import com.lunarshade.vkapp.dao.userdao.UserDao;
 import com.lunarshade.vkapp.dao.vkUser.VkRequestUser;
 import com.lunarshade.vkapp.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class AuthController {
 
     @PostMapping(value = "/auth")
     @ResponseBody
-    public VkRequestUser saveUserInfo(@RequestBody VkRequestUser vkUSer) {
-        return vkUSer;
+    public UserDao saveUserInfo(@RequestBody VkRequestUser vkUSer) {
+        return new UserDao(userService.saveUserFromVkMiniApp(vkUSer));
     }
 }

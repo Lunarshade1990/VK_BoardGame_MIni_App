@@ -7,6 +7,6 @@ public record VkRequestUser(
         String photo_100,
         short sex,
         String token,
-        City city
+        VkCity city
 ) {
 }

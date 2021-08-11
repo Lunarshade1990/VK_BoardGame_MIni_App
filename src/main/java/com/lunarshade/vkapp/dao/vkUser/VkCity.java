@@ -1,6 +1,6 @@
 package com.lunarshade.vkapp.dao.vkUser;
 
-public record City(
+public record VkCity(
         long id,
         String title
 ) {
