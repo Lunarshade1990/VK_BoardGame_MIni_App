@@ -29,13 +29,13 @@ public class VkMiniappUserDetailService implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException("User not found");
 
         return User.builder()
-                .username("OK" + " " + "OK")
+                .username(id)
                 .password("")
-                .disabled(false)
+                .disabled(!user.isActive())
                 .credentialsExpired(false)
                 .accountExpired(false)
                 .accountLocked(false)
-                .authorities(new SimpleGrantedAuthority("ROLE_USER"))
+                .authorities(getAuthoritisList(user))
                 .build();
     }
 

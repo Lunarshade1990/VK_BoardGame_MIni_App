@@ -1,7 +1,7 @@
-package com.lunarshade.vkapp.dto.tesera;
+package com.lunarshade.vkapp.dao.tesera;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.Date;
 

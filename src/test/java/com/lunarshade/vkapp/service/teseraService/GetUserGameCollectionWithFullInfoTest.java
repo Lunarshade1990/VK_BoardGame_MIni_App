@@ -1,6 +1,6 @@
 package com.lunarshade.vkapp.service.teseraService;
 
-import com.lunarshade.vkapp.dto.tesera.TeseraGame;
+import com.lunarshade.vkapp.dao.tesera.TeseraGame;
 import com.lunarshade.vkapp.service.TeseraService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

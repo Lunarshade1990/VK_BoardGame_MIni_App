@@ -1,4 +1,4 @@
-package com.lunarshade.vkapp.dto.tesera;
+package com.lunarshade.vkapp.dao.tesera;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

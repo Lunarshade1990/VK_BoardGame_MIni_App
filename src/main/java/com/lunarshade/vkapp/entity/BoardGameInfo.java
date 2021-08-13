@@ -15,6 +15,8 @@ import java.util.Set;
 public class BoardGameInfo {
     private int minPlayerNumber;
     private int maxPlayerNumber;
+    private int minTime;
+    private int maxTime;
     @ElementCollection
     private Set<String> genres;
 }

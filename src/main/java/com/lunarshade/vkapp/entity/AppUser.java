@@ -29,7 +29,7 @@ public class AppUser {
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Set<Event> events;
     @Enumerated(EnumType.STRING)
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Roles> roles;
     @JoinTable(name = "user_plays",
             joinColumns = @JoinColumn(name = "user_id"),

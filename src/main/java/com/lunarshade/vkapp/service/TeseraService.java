@@ -1,9 +1,9 @@
 package com.lunarshade.vkapp.service;
 
-import com.lunarshade.vkapp.dto.tesera.TeseraGame;
-import com.lunarshade.vkapp.dto.tesera.TeseraUserCollectionGame;
-import com.lunarshade.vkapp.dto.tesera.TeseraUserCollectionInfo;
-import com.lunarshade.vkapp.dto.tesera.TeseraUserCollectionInfo.CollectionType;
+import com.lunarshade.vkapp.dao.tesera.TeseraGame;
+import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionGame;
+import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionInfo;
+import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionInfo.CollectionType;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
