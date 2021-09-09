@@ -55,4 +55,5 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().disable();
 
     }
+
 }

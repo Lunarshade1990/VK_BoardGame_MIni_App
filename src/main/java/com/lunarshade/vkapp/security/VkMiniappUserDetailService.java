@@ -31,7 +31,7 @@ public class VkMiniappUserDetailService implements UserDetailsService {
         return User.builder()
                 .username(id)
                 .password("")
-                .disabled(!user.isActive())
+                .disabled(false)
                 .credentialsExpired(false)
                 .accountExpired(false)
                 .accountLocked(false)
