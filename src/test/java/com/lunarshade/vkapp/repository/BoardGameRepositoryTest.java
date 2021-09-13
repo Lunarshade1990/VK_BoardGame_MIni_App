@@ -1,6 +1,6 @@
 package com.lunarshade.vkapp.repository;
 
-import com.lunarshade.vkapp.dao.userdao.BoardGameInfo;
+import com.lunarshade.vkapp.dto.userdao.BoardGameInfo;
 import com.lunarshade.vkapp.entity.CollectionType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.lunarshade.vkapp.repository;
 
-import com.lunarshade.vkapp.dao.userdao.UserInfo;
+import com.lunarshade.vkapp.dto.userdao.UserInfo;
 import com.lunarshade.vkapp.entity.AppUser;
 import com.lunarshade.vkapp.entity.CollectionType;
 import org.springframework.data.jpa.repository.JpaRepository;

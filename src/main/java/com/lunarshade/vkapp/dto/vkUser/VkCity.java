@@ -1,4 +1,4 @@
-package com.lunarshade.vkapp.dao.vkUser;
+package com.lunarshade.vkapp.dto.vkUser;
 
 public record VkCity(
         long id,

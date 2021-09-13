@@ -1,7 +1,7 @@
 package com.lunarshade.vkapp.repository.repositoryUtil;
 
-import com.lunarshade.vkapp.dao.userdao.BoardGameInfo;
-import com.lunarshade.vkapp.dao.userdao.CollectionDto;
+import com.lunarshade.vkapp.dto.userdao.BoardGameInfo;
+import com.lunarshade.vkapp.dto.userdao.CollectionDto;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 

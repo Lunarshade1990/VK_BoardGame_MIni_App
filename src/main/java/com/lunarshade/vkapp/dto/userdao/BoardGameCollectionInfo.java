@@ -1,4 +1,4 @@
-package com.lunarshade.vkapp.dao.userdao;
+package com.lunarshade.vkapp.dto.userdao;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.lunarshade.vkapp.dao.userdao;
+package com.lunarshade.vkapp.dto.userdao;
 
 import com.lunarshade.vkapp.entity.CollectionType;
 import com.lunarshade.vkapp.repository.BoardGameRepository;

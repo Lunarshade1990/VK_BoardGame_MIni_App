@@ -1,4 +1,4 @@
-package com.lunarshade.vkapp.dao.userdao;
+package com.lunarshade.vkapp.dto.userdao;
 
 import com.lunarshade.vkapp.entity.AppUser;
 import lombok.Getter;

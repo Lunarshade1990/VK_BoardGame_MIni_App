@@ -1,4 +1,4 @@
-package com.lunarshade.vkapp.dao.tesera;
+package com.lunarshade.vkapp.dto.tesera;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

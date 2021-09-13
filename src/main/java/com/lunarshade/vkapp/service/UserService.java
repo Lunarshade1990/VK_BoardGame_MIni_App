@@ -1,7 +1,7 @@
 package com.lunarshade.vkapp.service;
 
-import com.lunarshade.vkapp.dao.tesera.TeseraGame;
-import com.lunarshade.vkapp.dao.vkUser.VkRequestUser;
+import com.lunarshade.vkapp.dto.tesera.TeseraGame;
+import com.lunarshade.vkapp.dto.vkUser.VkRequestUser;
 import com.lunarshade.vkapp.entity.*;
 import com.lunarshade.vkapp.repository.BoardGameRepository;
 import com.lunarshade.vkapp.repository.CollectionRepository;

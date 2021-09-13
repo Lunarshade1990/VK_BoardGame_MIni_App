@@ -1,7 +1,7 @@
 package com.lunarshade.vkapp.controller;
 
-import com.lunarshade.vkapp.dao.userdao.UserDao;
-import com.lunarshade.vkapp.dao.vkUser.VkRequestUser;
+import com.lunarshade.vkapp.dto.userdao.UserDao;
+import com.lunarshade.vkapp.dto.vkUser.VkRequestUser;
 import com.lunarshade.vkapp.service.UserService;
 import org.springframework.web.bind.annotation.*;
 

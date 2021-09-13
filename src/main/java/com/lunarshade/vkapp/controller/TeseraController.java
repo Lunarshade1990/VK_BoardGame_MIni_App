@@ -1,7 +1,7 @@
 package com.lunarshade.vkapp.controller;
 
 
-import com.lunarshade.vkapp.dao.tesera.TeseraGame;
+import com.lunarshade.vkapp.dto.tesera.TeseraGame;
 import com.lunarshade.vkapp.entity.AppUser;
 import com.lunarshade.vkapp.service.TeseraService;
 import com.lunarshade.vkapp.service.UserService;

@@ -1,9 +1,9 @@
 package com.lunarshade.vkapp.service;
 
-import com.lunarshade.vkapp.dao.tesera.TeseraGame;
-import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionGame;
-import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionInfo;
-import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionInfo.CollectionType;
+import com.lunarshade.vkapp.dto.tesera.TeseraGame;
+import com.lunarshade.vkapp.dto.tesera.TeseraUserCollectionGame;
+import com.lunarshade.vkapp.dto.tesera.TeseraUserCollectionInfo;
+import com.lunarshade.vkapp.dto.tesera.TeseraUserCollectionInfo.CollectionType;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

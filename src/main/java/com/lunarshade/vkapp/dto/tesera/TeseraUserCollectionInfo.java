@@ -1,4 +1,4 @@
-package com.lunarshade.vkapp.dao.tesera;
+package com.lunarshade.vkapp.dto.tesera;
 
 import lombok.Data;
 
