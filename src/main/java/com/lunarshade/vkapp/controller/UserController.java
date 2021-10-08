@@ -1,15 +1,18 @@
 package com.lunarshade.vkapp.controller;
 
-import com.lunarshade.vkapp.dao.userdao.BoardGameInfo;
-import com.lunarshade.vkapp.dao.userdao.CollectionDto;
+import com.lunarshade.vkapp.dao.BoardGameDao;
+import com.lunarshade.vkapp.dao.CollectionDto;
+import com.lunarshade.vkapp.dao.request.BoardGameFilter;
 import com.lunarshade.vkapp.dao.userdao.UserDao;
 import com.lunarshade.vkapp.entity.CollectionType;
 import com.lunarshade.vkapp.repository.BoardGameRepository;
-import com.lunarshade.vkapp.repository.repositoryUtil.CollectionPageResponse;
+import com.lunarshade.vkapp.repository.response.PageResponse;
+import com.lunarshade.vkapp.repository.response.collection.CollectionPageResponse;
+import com.lunarshade.vkapp.service.BoardGameService;
+import com.lunarshade.vkapp.service.CollectionService;
 import com.lunarshade.vkapp.service.UserService;
-import org.springframework.data.domain.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +20,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
+@RequiredArgsConstructor
 public class UserController {
 
-    final UserService userService;
-    final BoardGameRepository boardGameRepository;
-
-    public UserController(UserService userService, BoardGameRepository boardGameRepository) {
-        this.userService = userService;
-        this.boardGameRepository = boardGameRepository;
-    }
+    private final UserService userService;
+    private final BoardGameRepository boardGameRepository;
+    private final BoardGameService boardGameService;
+    private final CollectionService collectionService;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDao> getUserByVkId(@PathVariable String id) {
@@ -43,94 +44,14 @@ public class UserController {
                                                               @PathVariable CollectionType type,
                                                               @RequestParam(required = false) Integer size,
                                                               @RequestParam(required = false) Integer page,
-                                                              @RequestParam(required = false) Integer[] players,
-                                                              @RequestParam(required = false) Integer[] time,
-                                                              @RequestParam(required = false) Integer[] mode,
-                                                              @RequestParam(required = false) String modeName) {
+                                                              BoardGameFilter filter) {
 
         size = size==null ? 10 : size;
         page = page==null ? 0 : page-1;
 
-        CollectionDto collectionInfo = new CollectionDto(boardGameRepository, user, type);
-        int minPlayers = players == null ? collectionInfo.getMinPlayers() : players[0];
-        int maxPlayers = players == null ? collectionInfo.getMaxPlayers() : players[1];
-        int minTime = time == null ? collectionInfo.getMinTime() : time[0];
-        int maxTime = time == null ? collectionInfo.getMaxTime() : time[1];
-        Page<BoardGameInfo> collectionPage;
-
-        if (modeName != null) {
-            switch (modeName) {
-                case "solo":
-                    if (minPlayers > 1) return new CollectionPageResponse(Page.empty(), collectionInfo);
-                    else {
-                        collectionPage = boardGameRepository
-                                .getBoardGameByCollectionTypeAndUserIdForSoloOrTwo(
-                                        user,
-                                        type,
-                                        1,
-                                        minTime,
-                                        maxTime,
-                                        PageRequest.of(page, size, Sort.by("bgc.added").descending())
-                                );
-                        return new CollectionPageResponse(collectionPage, collectionInfo);
-                    }
-                case "duel+":
-                    if (minPlayers > 2) return new CollectionPageResponse(Page.empty(), collectionInfo);
-                    else {
-                        collectionPage = boardGameRepository
-                                .getBoardGameByCollectionTypeAndUserIdForSoloOrTwo(
-                                        user,
-                                        type,
-                                        2,
-                                        minTime,
-                                        maxTime,
-                                        PageRequest.of(page, size, Sort.by("bgc.added").descending())
-                                );
-                        return new CollectionPageResponse(collectionPage, collectionInfo);
-                    }
-                case "duel":
-                    if (minPlayers > 2) return new CollectionPageResponse(Page.empty(), collectionInfo);
-                    else {
-                        collectionPage = boardGameRepository
-                                .getBoardGameByCollectionTypeAndUserIdForDuel(
-                                        user,
-                                        type,
-                                        minTime,
-                                        maxTime,
-                                        PageRequest.of(page, size, Sort.by("bgc.added").descending())
-                                );
-                        return new CollectionPageResponse(collectionPage, collectionInfo);
-                    }
-                case "company":
-                    if (minPlayers > mode[0] || maxPlayers < mode[1]) return new CollectionPageResponse(Page.empty(), collectionInfo);
-                    else {
-                        collectionPage = boardGameRepository
-                                .getBoardGameByCollectionTypeAndUserIdForCompany(
-                                        user,
-                                        type,
-                                        mode[0],
-                                        mode[1],
-                                        minTime,
-                                        maxTime,
-                                        PageRequest.of(page, size, Sort.by("bgc.added").descending())
-                                );
-                        return new CollectionPageResponse(collectionPage, collectionInfo);
-                    }
-            }
-        }
-
-
-        collectionPage = boardGameRepository
-                .getBoardGameByCollectionTypeAndUserIdWithFilter(
-                        user,
-                        type,
-                        minPlayers,
-                        maxPlayers,
-                        minTime,
-                        maxTime,
-                        PageRequest.of(page, size, Sort.by("bgc.added").descending())
-                );
-
+        CollectionDto collectionInfo = collectionService.getCollectionInfoByUserIdAndCollectionType(user, type);
+        PageResponse<BoardGameDao> collectionPage = boardGameService
+                .getBoardGamesByOwnerAndCollectionTypeWithFilter(user, type, filter, PageRequest.of(page, size));
         return new CollectionPageResponse(collectionPage, collectionInfo);
     }
 }

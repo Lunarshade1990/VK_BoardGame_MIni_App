@@ -6,10 +6,11 @@ import com.lunarshade.vkapp.entity.CollectionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface BoardGameRepository extends PagingAndSortingRepository<BoardGame, Long> {
+public interface BoardGameRepository extends PagingAndSortingRepository<BoardGame, Long>, QuerydslPredicateExecutor<BoardGame> {
 
     @Query("select game from BoardGame game " +
             "inner join game.boardGameCollections bgc " +
@@ -34,47 +35,6 @@ public interface BoardGameRepository extends PagingAndSortingRepository<BoardGam
                                                                         @Param("maxTime") Integer maxTime,
                                                                         Pageable pageable);
 
-    @Query("select game from BoardGame game " +
-            "inner join game.boardGameCollections bgc " +
-            "inner join bgc.collection c " +
-            "inner join c.appUser u " +
-            "where u.id = :userId and c.collectionType = :type " +
-            "and game.minPlayerNumber <= :minPlayers " +
-            "and game.maxPlayerNumber >= :maxPlayers " +
-            "and game.minTime >= :minTime and game.maxTime <= :maxTime")
-    Page<BoardGameInfo> getBoardGameByCollectionTypeAndUserIdForCompany(@Param("userId") long userId,
-                                                                        @Param("type") CollectionType type,
-                                                                        @Param("minPlayers") Integer minPlayerNumber,
-                                                                        @Param("maxPlayers") Integer maxPlayerNumber,
-                                                                        @Param("minTime") Integer minTime,
-                                                                        @Param("maxTime") Integer maxTime,
-                                                                        Pageable pageable);
-    @Query("select game from BoardGame game " +
-            "inner join game.boardGameCollections bgc " +
-            "inner join bgc.collection c " +
-            "inner join c.appUser u " +
-            "where u.id = :userId and c.collectionType = :type " +
-            "and game.minPlayerNumber <= :players " +
-            "and game.minTime >= :minTime and game.maxTime <= :maxTime")
-    Page<BoardGameInfo> getBoardGameByCollectionTypeAndUserIdForSoloOrTwo(@Param("userId") long userId,
-                                                                        @Param("type") CollectionType type,
-                                                                        @Param("players") Integer players,
-                                                                        @Param("minTime") Integer minTime,
-                                                                        @Param("maxTime") Integer maxTime,
-                                                                        Pageable pageable);
-
-    @Query("select game from BoardGame game " +
-            "inner join game.boardGameCollections bgc " +
-            "inner join bgc.collection c " +
-            "inner join c.appUser u " +
-            "where u.id = :userId and c.collectionType = :type " +
-            "and game.minPlayerNumber = 2 and game.maxPlayerNumber = 2" +
-            "and game.minTime >= :minTime and game.maxTime <= :maxTime")
-    Page<BoardGameInfo> getBoardGameByCollectionTypeAndUserIdForDuel(@Param("userId") long userId,
-                                                                        @Param("type") CollectionType type,
-                                                                        @Param("minTime") Integer minTime,
-                                                                        @Param("maxTime") Integer maxTime,
-                                                                        Pageable pageable);
 
 
 
