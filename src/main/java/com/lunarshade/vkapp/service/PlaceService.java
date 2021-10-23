@@ -55,7 +55,10 @@ public class PlaceService {
     }
 
     public Desk saveTable(Place place, TableForm tableForm) {
-        Desk desk = new Desk();
+        Desk desk;
+        if (tableForm.getId() != null) {
+            desk = deskRepository.findById(tableForm.getId()).get();
+        } else desk = new Desk();
         desk.setName(tableForm.getName());
         desk.setMaxPlayersNumber(tableForm.getMax());
         desk.setLength(tableForm.getLength());

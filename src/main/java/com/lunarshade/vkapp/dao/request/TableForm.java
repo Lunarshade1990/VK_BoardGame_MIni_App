@@ -5,9 +5,10 @@ import lombok.Data;
 
 @Data
 public class TableForm {
-    String name;
-    int width;
-    int length;
-    int max;
-    DeskShape shape;
+    private final Long id;
+    private final String name;
+    private final int width;
+    private final int length;
+    private final int max;
+    private final DeskShape shape;
 }
