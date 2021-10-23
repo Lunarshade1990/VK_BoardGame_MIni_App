@@ -29,7 +29,7 @@ public class AppUser {
     private String avatarUrl;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    private Set<Place> places;
+    private Set<Place> places = new HashSet<>();
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Set<Event> events = new HashSet<>();

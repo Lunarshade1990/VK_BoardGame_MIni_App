@@ -10,7 +10,6 @@ import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,6 +24,10 @@ public class UserService {
         this.userRepository = repository;
         this.boardGameRepository = boardGameRepository;
         this.collectionRepository = collectionRepository;
+    }
+
+    public AppUser find(long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     public AppUser saveUser(AppUser user) {
@@ -86,16 +89,5 @@ public class UserService {
         boardGameRepository.saveAll(boardGames);
         userRepository.save(appUser);
     }
-
-
-    private Set<Collection> getUserCollections(AppUser appUser) {
-        Set<Collection> collections = appUser.getCollections();
-        if (collections == null) {
-            collections = new HashSet<>();
-            appUser.setCollections(collections);
-        }
-        return collections;
-    }
-
 
 }

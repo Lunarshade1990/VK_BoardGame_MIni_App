@@ -17,12 +17,14 @@ public class Desk {
     @GeneratedValue
     private long id;
     private String name;
-    @Embedded
-    private Size size;
+    private int length;
+    private int width;
     private int maxPlayersNumber;
     private boolean isFree;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Place place;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Play> plays;
+    @Enumerated
+    private DeskShape deskShape;
 }

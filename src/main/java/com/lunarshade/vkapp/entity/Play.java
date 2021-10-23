@@ -37,11 +37,11 @@ public class Play {
     private long id;
     @ManyToOne
     private BoardGame boardGame;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Event event;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Desk table;
-    @ManyToMany(mappedBy = "plays")
+    @ManyToMany(mappedBy = "plays", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Set<AppUser> appUser;
     @Embedded
     private PlayTime plannedTime;
