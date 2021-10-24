@@ -6,6 +6,7 @@ import com.lunarshade.vkapp.dao.request.TableForm;
 import com.lunarshade.vkapp.dao.userdao.DeskInfo;
 import com.lunarshade.vkapp.dao.userdao.PlaceDao;
 import com.lunarshade.vkapp.entity.Place;
+import com.lunarshade.vkapp.service.DeskService;
 import com.lunarshade.vkapp.service.PlaceService;
 import com.lunarshade.vkapp.service.UserService;
 import com.lunarshade.vkapp.service.exceptions.ObjectExistsException;
@@ -25,6 +26,7 @@ public class PlaceController {
 
     private final PlaceService placeService;
     private final UserService userService;
+    private final DeskService deskService;
 
     @GetMapping("/public")
     @ResponseBody
@@ -37,7 +39,7 @@ public class PlaceController {
 
     @PostMapping("/{place}/tables")
     public ResponseEntity<Void> saveNewDesk(@PathVariable Place place, @RequestBody TableForm tableForm) {
-        placeService.saveTable(place, tableForm);
+        deskService.saveNewDesk(tableForm, place);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

@@ -1,10 +1,8 @@
 package com.lunarshade.vkapp.service;
 
 import com.lunarshade.vkapp.dao.request.PlaceRequest;
-import com.lunarshade.vkapp.dao.request.TableForm;
 import com.lunarshade.vkapp.dao.userdao.DeskInfo;
 import com.lunarshade.vkapp.entity.AppUser;
-import com.lunarshade.vkapp.entity.Desk;
 import com.lunarshade.vkapp.entity.Place;
 import com.lunarshade.vkapp.repository.DeskRepository;
 import com.lunarshade.vkapp.repository.PlaceInfoRepository;
@@ -22,6 +20,7 @@ public class PlaceService {
     private final PlaceInfoRepository placeInfoRepository;
     private final DeskRepository deskRepository;
     private final UserRepository userRepository;
+    private final DeskService deskService;
 
     public Place getPlaceIfExists(PlaceRequest form) {
         return form.publicPlace() ? getPublicPlaceIfExists(form.name(), form.address()) :
@@ -52,20 +51,6 @@ public class PlaceService {
         place = placeInfoRepository.save(place);
         userRepository.save(user);
         return place;
-    }
-
-    public Desk saveTable(Place place, TableForm tableForm) {
-        Desk desk;
-        if (tableForm.getId() != null) {
-            desk = deskRepository.findById(tableForm.getId()).get();
-        } else desk = new Desk();
-        desk.setName(tableForm.getName());
-        desk.setMaxPlayersNumber(tableForm.getMax());
-        desk.setLength(tableForm.getLength());
-        desk.setWidth(tableForm.getWidth());
-        desk.setDeskShape(tableForm.getShape());
-        desk.setPlace(place);
-        return deskRepository.save(desk);
     }
 
     public Set<DeskInfo> getPlaceDesks(Place place) {
