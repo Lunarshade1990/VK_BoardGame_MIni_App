@@ -47,4 +47,7 @@ public class Play {
     private PlayTime plannedTime;
     @Embedded
     private PlayTime realTime;
+    @Lob
+    @Column(columnDefinition = "CLOB")
+    private String comment;
 }

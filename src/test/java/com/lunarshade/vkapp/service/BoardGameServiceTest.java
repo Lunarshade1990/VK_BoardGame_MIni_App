@@ -31,7 +31,7 @@ public class BoardGameServiceTest extends Assertions {
     @Test
     @Transactional
     void getCollectionInfo() {
-        CollectionDto collectionDto = collectionService.getCollectionInfoByUserIdAndCollectionType(1, CollectionType.OWN);
+        CollectionDto collectionDto = collectionService.getCollectionInfoByUserIdAndCollectionType(1L, CollectionType.OWN);
         assertEquals(8, collectionDto.getMaxPlayerNumber());
     }
 

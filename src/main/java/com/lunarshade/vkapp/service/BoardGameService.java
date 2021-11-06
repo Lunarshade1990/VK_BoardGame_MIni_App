@@ -24,7 +24,7 @@ public class BoardGameService {
     private final EntityManager em;
 
 
-    public PageResponse<BoardGameDao> getBoardGamesByOwnerAndCollectionTypeWithFilter(long userId,
+    public PageResponse<BoardGameDao> getBoardGamesByOwnerAndCollectionTypeWithFilter(Long userId,
                                                                                       CollectionType type,
                                                                                       BoardGameFilter filter,
                                                                                       Pageable pageable) {
@@ -36,9 +36,11 @@ public class BoardGameService {
 
         QPredicates  qPredicates = QPredicates.builder();
 
-        qPredicates
-                .add(userId, boardGame.boardGameCollections.any().collection.appUser.id::eq)
-                .add(type, boardGame.boardGameCollections.any().collection.collectionType::eq);
+        if (type != CollectionType.ALL) {
+            qPredicates
+                    .add(userId, boardGame.boardGameCollections.any().collection.appUser.id::eq)
+                    .add(type, boardGame.boardGameCollections.any().collection.collectionType::eq);
+        }
 
         if (filter.getModeName() != null) {
             try {

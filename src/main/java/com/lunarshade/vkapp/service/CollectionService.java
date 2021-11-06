@@ -3,6 +3,7 @@ package com.lunarshade.vkapp.service;
 import com.lunarshade.vkapp.dao.CollectionDto;
 import com.lunarshade.vkapp.entity.*;
 import com.lunarshade.vkapp.repository.CollectionRepository;
+import com.lunarshade.vkapp.repository.util.QPredicates;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,17 @@ public class CollectionService {
     private final EntityManager entityManager;
 
 
-    public CollectionDto getCollectionInfoByUserIdAndCollectionType(long userId, CollectionType type) {
+    public CollectionDto getCollectionInfoByUserIdAndCollectionType(Long userId, CollectionType type) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QCollection collection = QCollection.collection;
         QBoardGame boardGame = QBoardGame.boardGame;
         QAppUser appUser = QAppUser.appUser;
         QBoardGameCollection boardGameCollection = QBoardGameCollection.boardGameCollection;
+
+        QPredicates qPredicates = QPredicates.builder();
+        qPredicates
+                .add(userId, appUser.id::eq)
+                .add(type, collection.collectionType::eq);
 
         return queryFactory.select(
                 Projections.constructor(CollectionDto.class,
@@ -37,7 +43,7 @@ public class CollectionService {
                 .innerJoin(appUser.collections, collection)
                 .innerJoin(collection.boardGameCollection, boardGameCollection)
                 .innerJoin(boardGameCollection.boardGame, boardGame)
-                .where(appUser.id.eq(userId).and(collection.collectionType.eq(type)))
+                .where(qPredicates.buildAnd())
                 .fetchOne();
     }
 
