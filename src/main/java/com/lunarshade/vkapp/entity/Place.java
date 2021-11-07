@@ -36,7 +36,7 @@ public class Place {
     @Column(columnDefinition = "boolean default false")
     private boolean publicPlace;
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "place", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     private Set<Event> events = new HashSet<>();
 
     private String type;

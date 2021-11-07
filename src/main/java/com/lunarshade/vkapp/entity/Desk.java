@@ -21,10 +21,13 @@ public class Desk {
     private int width;
     private int maxPlayersNumber;
     private boolean isFree;
+    private boolean byDefault;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Place place;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Play> plays;
     @Enumerated
     private DeskShape deskShape;
+    @Enumerated
+    private DeskType deskType;
 }

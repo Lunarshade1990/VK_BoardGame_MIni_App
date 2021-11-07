@@ -35,7 +35,17 @@ public class DeskService {
         desk.setWidth(tableForm.getWidth());
         desk.setDeskShape(tableForm.getShape());
         desk.setPlace(place);
+        desk.setByDefault(tableForm.isByDefault());
         return deskRepository.save(desk);
+    }
+
+    public void changeDefaultDesk(Desk desk) {
+        Place place = desk.getPlace();
+        place.getTables().stream()
+                .filter(d -> d.getId() != desk.getId())
+                .forEach(d -> d.setByDefault(false));
+        desk.setByDefault(true);
+        deskRepository.saveAll(place.getTables());
     }
 
 }

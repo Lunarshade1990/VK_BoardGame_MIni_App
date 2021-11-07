@@ -11,4 +11,5 @@ public class TableForm {
     private final int length;
     private final int max;
     private final DeskShape shape;
+    private final boolean byDefault;
 }

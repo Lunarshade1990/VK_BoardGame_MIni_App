@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.List;
 
 @Table(name = "event")
@@ -17,13 +18,14 @@ public class Event {
     @Id
     @GeneratedValue
     private long id;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
-    private AppUser appUser;
-    @ManyToOne
+    private AppUser creator;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "place_id")
     private Place place;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Play> plays;
+    private Calendar lastUpdateTime;
 
 }

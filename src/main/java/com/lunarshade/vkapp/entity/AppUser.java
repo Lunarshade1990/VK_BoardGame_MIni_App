@@ -41,7 +41,7 @@ public class AppUser {
     @JoinTable(name = "user_plays",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "plays_id"))
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany
     private Set<Play> plays = new HashSet<>();
 
     @OneToMany(mappedBy = "appUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})

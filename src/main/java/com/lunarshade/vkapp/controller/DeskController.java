@@ -30,5 +30,11 @@ public class DeskController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{table}/setDefault")
+    public ResponseEntity<Void> changeDefaultDesk(@PathVariable Desk table) {
+        deskService.changeDefaultDesk(table);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }
