@@ -31,7 +31,7 @@ public class AppUser {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Set<Place> places = new HashSet<>();
 
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private Set<Event> events = new HashSet<>();
 
     @Enumerated(EnumType.STRING)

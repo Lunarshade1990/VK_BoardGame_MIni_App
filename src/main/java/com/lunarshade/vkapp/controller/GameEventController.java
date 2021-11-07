@@ -1,5 +1,7 @@
 package com.lunarshade.vkapp.controller;
 
+import com.lunarshade.vkapp.dao.eventdao.EventDao;
+import com.lunarshade.vkapp.dao.eventdao.EventPlayDao;
 import com.lunarshade.vkapp.dao.request.gameevent.GameEventRqDto;
 import com.lunarshade.vkapp.dao.request.gameevent.PlayRqDto;
 import com.lunarshade.vkapp.entity.Event;
@@ -22,14 +24,14 @@ public class GameEventController {
 
     @PostMapping("/events")
     @ResponseBody
-    public Event saveNewEvent(@RequestBody GameEventRqDto gameEvent) {
-        return eventService.saveNewEvent(gameEvent);
+    public EventDao saveNewEvent(@RequestBody GameEventRqDto gameEvent) {
+        return new EventDao(eventService.saveNewEvent(gameEvent));
     }
 
     @PostMapping("/events/{event}/plays")
     @ResponseBody
-    public Play addNewPlay(@PathVariable Event event, PlayRqDto playRqDto) {
-        return eventService.addNewPlay(event, playRqDto);
+    public EventPlayDao addNewPlay(@PathVariable Event event, PlayRqDto playRqDto) {
+        return new EventPlayDao(eventService.addNewPlay(event, playRqDto));
     }
 
     @PostMapping("/events/{event}")
@@ -37,12 +39,12 @@ public class GameEventController {
         eventService.setEventLastUpdateTime(event, date);
     }
 
-    @PostMapping("/plays/{play}")
+    @PostMapping("/plays/{play}/players")
     public void addNewUser(@PathVariable Play play, Long userId) throws Exception {
         eventService.addNewUser(play, userService.find(userId));
     }
 
-    @PostMapping("/plays/{play}")
+    @PostMapping("/plays/{play}/virtuals")
     public void addNewUser(@PathVariable Play play, String info) throws Exception {
         eventService.addNewVirtualUser(play, info);
     }

@@ -5,10 +5,12 @@ import com.lunarshade.vkapp.dao.request.gameevent.PlayRqDto;
 import com.lunarshade.vkapp.entity.*;
 import com.lunarshade.vkapp.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class EventService {
 
