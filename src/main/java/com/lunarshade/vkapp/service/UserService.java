@@ -53,15 +53,18 @@ public class UserService {
         return  userRepository.save(appUser);
     }
 
-    public void saveGameCollection (List<TeseraGame> games, AppUser appUser) {
-        Collection collection = appUser.getCollectionByType(CollectionType.OWN);
-
+    public void saveGameCollection (List<TeseraGame> games, AppUser appUser, CollectionType type) {
+        Collection collection = appUser.getCollectionByType(type);
+        collection.getBoardGameCollection().clear();
         Set<BoardGameCollection> boardGameCollections = collection.getBoardGameCollection();
 
         List<BoardGame> boardGames = games.parallelStream()
                 .map(teseraGame -> {
-                    var boardGame = new BoardGame();
                     TeseraGame.Game game = teseraGame.getGame();
+                    BoardGame boardGame = boardGameRepository.findByTeseraId(game.getTeseraId());
+                    if (boardGame == null) {
+                        boardGame = new BoardGame();
+                    }
                     boardGame.setName(game.getTitle());
                     boardGame.setName2(game.getTitle2());
                     boardGame.setPicture(game.getPhotoUrl());
@@ -72,10 +75,6 @@ public class UserService {
                     boardGame.setMaxPlayerNumber(game.getPlayersMax());
                     boardGame.setMinTime(game.getPlaytimeMin());
                     boardGame.setMaxTime(game.getPlaytimeMax());
-
-                    collection.setCollectionType(CollectionType.OWN);
-                    collection.setBoardGameCollection(boardGameCollections);
-
                     BoardGameCollection boardGameCollection = new BoardGameCollection();
                     boardGameCollection.setBoardGame(boardGame);
                     boardGameCollection.setCollection(collection);
@@ -88,6 +87,11 @@ public class UserService {
         collectionRepository.save(collection);
         boardGameRepository.saveAll(boardGames);
         userRepository.save(appUser);
+    }
+
+
+    public Set<Event> getUserPlays (AppUser user) {
+        return user.getEvents();
     }
 
 }

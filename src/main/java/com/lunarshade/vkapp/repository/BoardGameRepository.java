@@ -10,6 +10,8 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface BoardGameRepository extends PagingAndSortingRepository<BoardGame, Long>, QuerydslPredicateExecutor<BoardGame> {
 
     @Query("select game from BoardGame game " +
@@ -65,5 +67,8 @@ public interface BoardGameRepository extends PagingAndSortingRepository<BoardGam
             "inner join c.appUser u " +
             "where u.id = ?1 and c.collectionType = ?2")
     int getMaxTimeInUserCollection(long userId, CollectionType type);
+
+    List<BoardGame> findAllByTeseraId(Iterable<Long> ids);
+    BoardGame findByTeseraId(Long id);
 
 }

@@ -1,7 +1,10 @@
 package com.lunarshade.vkapp.dao.eventdao;
 
 import com.lunarshade.vkapp.entity.Place;
+import lombok.Data;
 
+
+@Data
 public class EventPlaceDao {
     private final Long id;
     private final String address;

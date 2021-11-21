@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Table(name = "event")
@@ -25,7 +26,11 @@ public class Event {
     @JoinColumn(name = "place_id")
     private Place place;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Play> plays;
-    private Calendar lastUpdateTime;
+    private List<Play> plays = new ArrayList<>();
+    private Date lastUpdateTime;
+    private Date startDate;
+    private Date endDate;
+    @Enumerated
+    EventType type;
 
 }

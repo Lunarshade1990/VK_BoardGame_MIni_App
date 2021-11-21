@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 public class PlayRqDtoTest extends Assertions {
 
@@ -19,8 +19,8 @@ public class PlayRqDtoTest extends Assertions {
                             1L,
                             1L,
                             new ArrayList<Long>(),
-                            new GregorianCalendar(),
-                            new GregorianCalendar(),
+                            new Date(),
+                            new Date(),
                             2,
                             5,
                             null,
@@ -37,8 +37,8 @@ public class PlayRqDtoTest extends Assertions {
                             1L,
                             null,
                             new ArrayList<Long>(),
-                            new GregorianCalendar(),
-                            new GregorianCalendar(),
+                            new Date(),
+                            new Date(),
                             2,
                             5,
                             null,

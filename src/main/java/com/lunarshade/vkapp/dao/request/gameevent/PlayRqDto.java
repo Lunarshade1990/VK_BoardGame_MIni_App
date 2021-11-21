@@ -1,14 +1,14 @@
 package com.lunarshade.vkapp.dao.request.gameevent;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 
 public record PlayRqDto(
         Long host,
         Long game,
         ArrayList<Long> players,
-        Calendar timeFrom,
-        Calendar timeTo,
+        Date timeFrom,
+        Date timeTo,
         Integer playersTo,
         Integer playersFrom,
         String comment,
@@ -18,8 +18,8 @@ public record PlayRqDto(
     public PlayRqDto(Long host,
                      Long game,
                      ArrayList<Long> players,
-                     Calendar timeFrom,
-                     Calendar timeTo,
+                     Date timeFrom,
+                     Date timeTo,
                      Integer playersTo,
                      Integer playersFrom,
                      String comment,

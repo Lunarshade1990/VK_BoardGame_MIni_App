@@ -2,24 +2,25 @@ package com.lunarshade.vkapp.controller;
 
 import com.lunarshade.vkapp.dao.BoardGameDao;
 import com.lunarshade.vkapp.dao.CollectionDto;
+import com.lunarshade.vkapp.dao.eventdao.EventDao;
 import com.lunarshade.vkapp.dao.request.BoardGameFilter;
 import com.lunarshade.vkapp.dao.userdao.PlaceDao;
 import com.lunarshade.vkapp.dao.userdao.UserDao;
 import com.lunarshade.vkapp.entity.AppUser;
 import com.lunarshade.vkapp.entity.CollectionType;
+import com.lunarshade.vkapp.entity.Event;
 import com.lunarshade.vkapp.repository.BoardGameRepository;
 import com.lunarshade.vkapp.repository.response.PageResponse;
 import com.lunarshade.vkapp.repository.response.collection.CollectionPageResponse;
-import com.lunarshade.vkapp.service.BoardGameService;
-import com.lunarshade.vkapp.service.CollectionService;
-import com.lunarshade.vkapp.service.PlaceService;
-import com.lunarshade.vkapp.service.UserService;
+import com.lunarshade.vkapp.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public class UserController {
     private final BoardGameService boardGameService;
     private final CollectionService collectionService;
     private final PlaceService placeService;
+    private final EventService eventService;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDao> getUserByVkId(@PathVariable String id) {
@@ -71,6 +73,11 @@ public class UserController {
        return placeDaos;
     }
 
-
+    @GetMapping("/{user}/events/actual")
+    public List<EventDao> getUserEvents(@PathVariable AppUser user) {
+       List<Event> eventList = eventService.getActualUserEvents(user);
+       eventList.sort(Comparator.comparing(Event::getStartDate));
+       return eventList.stream().map(EventDao::new).toList();
+    }
 }
 

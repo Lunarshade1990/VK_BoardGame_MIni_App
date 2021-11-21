@@ -1,9 +1,12 @@
 package com.lunarshade.vkapp.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Embeddable;
-import java.util.Calendar;
+import java.util.Date;
 
 @Embeddable
 @Getter
@@ -11,6 +14,6 @@ import java.util.Calendar;
 @ToString
 @RequiredArgsConstructor
 public class Time {
-    private Calendar timeStart;
-    private Calendar timeEnd;
+    private Date timeStart;
+    private Date timeEnd;
 }

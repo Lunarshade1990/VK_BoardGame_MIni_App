@@ -3,6 +3,7 @@ package com.lunarshade.vkapp.controller;
 
 import com.lunarshade.vkapp.dao.tesera.TeseraGame;
 import com.lunarshade.vkapp.entity.AppUser;
+import com.lunarshade.vkapp.entity.CollectionType;
 import com.lunarshade.vkapp.service.TeseraService;
 import com.lunarshade.vkapp.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class TeseraController {
         executorService.execute(() -> {
             try {
                 List<TeseraGame> teseraGameList = teseraService.getUserGameCollectionWithFullInfo(nickname);
-                userService.saveGameCollection(teseraGameList, appUser);
+                userService.saveGameCollection(teseraGameList, appUser, CollectionType.OWN);
                 output.setResult(new ResponseEntity<>(HttpStatus.OK));
             } catch (InterruptedException e) {
                 e.printStackTrace();

@@ -7,19 +7,19 @@ import com.lunarshade.vkapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class EventService {
 
-    UserRepository userRepository;
-    BoardGameRepository boardGameRepository;
-    PlaceInfoRepository placeRepository;
-    DeskRepository deskRepository;
-    EventRepository eventRepository;
-    PlayRepository playRepository;
+    private final UserRepository userRepository;
+    private final BoardGameRepository boardGameRepository;
+    private final PlaceInfoRepository placeRepository;
+    private final DeskRepository deskRepository;
+    private final EventRepository eventRepository;
+    private final PlayRepository playRepository;
 
     public Event saveNewEvent(GameEventRqDto gameEventRqDto) {
         PlayRqDto playRqDto = gameEventRqDto
@@ -36,8 +36,9 @@ public class EventService {
         event.setCreator(creator);
         fillPlayInfo(play, playRqDto, boardGame, host, eventDesk);
         play.setEvent(event);
-        eventDesk.getPlays().add(play);
         event.getPlays().add(play);
+        setEventStartAndEndDates(event);
+        event.setLastUpdateTime(event.getStartDate());
         event = eventRepository.save(event);
         return event;
     }
@@ -46,20 +47,44 @@ public class EventService {
         Play play = new Play();
         BoardGame boardGame = boardGameRepository.findById(playRqDto.game()).get();
         AppUser host = userRepository.findById(playRqDto.host()).get();
-        Desk desk = deskRepository.getById(playRqDto.tableId());
+        Desk desk = deskRepository.findById(playRqDto.tableId()).get();
         fillPlayInfo(play, playRqDto, boardGame, host, desk);
         play.setEvent(event);
+        event.getPlays().add(play);
+        setEventStartAndEndDates(event);
+        if (event.getLastUpdateTime().compareTo(event.getStartDate()) > 0) {
+            event.setLastUpdateTime(event.getStartDate());
+        }
         return playRepository.save(play);
     }
 
 
 
-    public void updatePlay(Play play, PlayRqDto playRqDto) {
+    public Play updatePlay(Play play, PlayRqDto playRqDto) {
         BoardGame boardGame = boardGameRepository.findById(playRqDto.game()).get();
         AppUser host = userRepository.findById(playRqDto.host()).get();
         Desk desk = deskRepository.getById(playRqDto.tableId());
         fillPlayInfo(play, playRqDto, boardGame, host, desk);
-        playRepository.save(play);
+        return playRepository.save(play);
+    }
+
+    public void setEventStartAndEndDates (Event event) {
+        List<Date> dates = sortPlayByDate(event.getPlays());
+        event.setStartDate(dates.get(0));
+        event.setEndDate(dates.get(dates.size()-1));
+    }
+
+    private List<Date> sortPlayByDate (List<Play> plays) {
+        List<Date> dates = plays.stream()
+                .flatMap(play -> {
+                    ArrayList<Date> d = new ArrayList<>();
+                    d.add(play.getPlannedTime().getTimeStart());
+                    d.add(play.getPlannedTime().getTimeEnd());
+                    return d.stream();
+                })
+                .sorted()
+                .collect(Collectors.toList());
+        return dates;
     }
 
     private void fillPlayInfo(Play play, PlayRqDto playRqDto, BoardGame boardGame, AppUser host, Desk desk) {
@@ -80,10 +105,12 @@ public class EventService {
         if (playRqDto.virtualPlayers() != null) {
             playRqDto.virtualPlayers().forEach(play.getVirtualUsers()::add);
         }
-
+        host.getPlays().add(play);
+        boardGame.getPlays().add(play);
+        desk.getPlays().add(play);
     }
 
-    public void setEventLastUpdateTime(Event event, Calendar date) {
+    public void setEventLastUpdateTime(Event event, Date date) {
         event.setLastUpdateTime(date);
         eventRepository.save(event);
     }
@@ -136,5 +163,16 @@ public class EventService {
         return desk;
     }
 
+    public void updateLastUpdateDate(Event event, Date date) {
+        event.setLastUpdateTime(date);
+        eventRepository.save(event);
+    }
 
+    public List<Event> getActualUserEvents(AppUser user) {
+        return eventRepository.findAllByCreatorAndStartDateAfter(user, new Date());
+    }
+
+    public List<Event> getAllEvents(AppUser user) {
+        return eventRepository.findAll();
+    }
 }
