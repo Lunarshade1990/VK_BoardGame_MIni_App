@@ -38,6 +38,7 @@ public class BoardGameService {
 
         if (type != CollectionType.ALL) {
             qPredicates
+                    .add(boardGame.boardGameCollections.any().deleted.isNull())
                     .add(userId, boardGame.boardGameCollections.any().collection.appUser.id::eq)
                     .add(type, boardGame.boardGameCollections.any().collection.collectionType::eq);
         }

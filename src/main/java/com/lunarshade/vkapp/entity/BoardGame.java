@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Table(name = "board_game")
@@ -37,7 +38,7 @@ public class BoardGame {
     @OneToMany
     private Set<Play> plays = new HashSet<>();
 
-    @OneToMany(mappedBy = "boardGame", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "boardGame", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private Set<BoardGameCollection> boardGameCollections = new HashSet<>();
 
     public Date getAdded(CollectionType type, long userId) {
@@ -47,5 +48,18 @@ public class BoardGame {
                 .findFirst()
                 .orElseThrow();
         return collection.getAdded();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardGame boardGame = (BoardGame) o;
+        return id == boardGame.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

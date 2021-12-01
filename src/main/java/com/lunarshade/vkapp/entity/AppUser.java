@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity(name = "user")
 @Getter
@@ -54,19 +51,18 @@ public class AppUser {
             fetch = FetchType.LAZY)
     private City city;
 
-    public Collection getCollectionByType(CollectionType type) {
-        Collection collection;
-        if (collections.size() == 0) {
-            collection = new Collection(type);
-            collections.add(collection);
-            collection.setAppUser(this);
-        } else {
-            collection = this.getCollections()
-                    .stream()
-                    .filter(c -> c.getCollectionType().equals(type))
-                    .findFirst()
-                    .get();
-        }
-        return collection;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppUser user = (AppUser) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

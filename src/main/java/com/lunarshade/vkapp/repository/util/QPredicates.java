@@ -21,6 +21,11 @@ public class QPredicates {
         return this;
     }
 
+    public QPredicates add(Predicate function) {
+        predicates.add(function);
+        return this;
+    }
+
     public Predicate buildAnd() {
         return ExpressionUtils.allOf(predicates);
     }

@@ -41,7 +41,8 @@ public class TeseraController {
         executorService.execute(() -> {
             try {
                 List<TeseraGame> teseraGameList = teseraService.getUserGameCollectionWithFullInfo(nickname);
-                userService.saveGameCollection(teseraGameList, appUser, CollectionType.OWN);
+                List<TeseraGame.Game> teseraGames = teseraGameList.stream().map(TeseraGame::getGame).toList();
+                userService.saveGameCollection(teseraGames, appUser, CollectionType.OWN);
                 output.setResult(new ResponseEntity<>(HttpStatus.OK));
             } catch (InterruptedException e) {
                 e.printStackTrace();

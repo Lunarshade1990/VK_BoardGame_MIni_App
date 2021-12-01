@@ -68,7 +68,8 @@ public interface BoardGameRepository extends PagingAndSortingRepository<BoardGam
             "where u.id = ?1 and c.collectionType = ?2")
     int getMaxTimeInUserCollection(long userId, CollectionType type);
 
-    List<BoardGame> findAllByTeseraId(Iterable<Long> ids);
+    List<BoardGame> findAllByTeseraIdIn(List<Long> ids);
     BoardGame findByTeseraId(Long id);
+
 
 }
