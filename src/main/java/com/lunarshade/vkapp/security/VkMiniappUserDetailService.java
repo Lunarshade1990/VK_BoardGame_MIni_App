@@ -15,7 +15,7 @@ import java.util.Collection;
 @Service
 public class VkMiniappUserDetailService implements UserDetailsService {
 
-    UserService userService;
+    private final UserService userService;
 
     public VkMiniappUserDetailService(UserService userService) {
         this.userService = userService;

@@ -4,6 +4,7 @@ import com.lunarshade.vkapp.security.VkMiniAppAuthenticationEntryPoint;
 import com.lunarshade.vkapp.security.VkMiniAppAuthenticationFilter;
 import com.lunarshade.vkapp.security.VkMiniappUserDetailService;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,7 +19,7 @@ import java.util.Collections;
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    final VkMiniappUserDetailService userDetailService;
+    @Lazy final VkMiniappUserDetailService userDetailService;
     final VkMiniAppAuthenticationFilter vkMiniAppAuthenticationFilter;
     final VkMiniAppAuthenticationEntryPoint vkMiniAppAuthenticationEntryPoint;
 

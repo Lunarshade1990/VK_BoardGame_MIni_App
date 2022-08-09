@@ -4,24 +4,55 @@ import com.lunarshade.vkapp.dao.tesera.TeseraGame;
 import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionGame;
 import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionInfo;
 import com.lunarshade.vkapp.dao.tesera.TeseraUserCollectionInfo.CollectionType;
+import com.lunarshade.vkapp.entity.AppUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class TeseraService {
+
+    private final UserService userService;
 
     RestTemplate restTemplate = new RestTemplate();
     private final String BASE_URL= "https://api.tesera.ru";
     private final int limit = 15;
+    // A service that calls out over HTTP
+
+    @Transactional
+    public DeferredResult<ResponseEntity<Void>> importCollection(String nickname, AppUser appUser) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+        DeferredResult<ResponseEntity<Void>> output = new DeferredResult<>();
+        executorService.execute(() -> {
+            try {
+                List<TeseraGame> teseraGameList = getUserGameCollectionWithFullInfo(nickname);
+                List<TeseraGame.Game> teseraGames = teseraGameList.stream().map(TeseraGame::getGame).toList();
+                userService.saveGameCollection(teseraGames, appUser, com.lunarshade.vkapp.entity.CollectionType.OWN);
+                output.setResult(new ResponseEntity<>(HttpStatus.OK));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        return output;
+    }
+
 
     public List<TeseraGame> getUserGameCollectionWithFullInfo (String nickname) throws InterruptedException {
         List<TeseraUserCollectionGame> games = getUserGameCollection(nickname);

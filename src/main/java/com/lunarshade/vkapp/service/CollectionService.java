@@ -2,21 +2,21 @@ package com.lunarshade.vkapp.service;
 
 import com.lunarshade.vkapp.dao.CollectionDto;
 import com.lunarshade.vkapp.entity.*;
-import com.lunarshade.vkapp.repository.CollectionRepository;
 import com.lunarshade.vkapp.repository.util.QPredicates;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class CollectionService {
 
-    private final CollectionRepository collectionRepository;
     private final EntityManager entityManager;
 
 

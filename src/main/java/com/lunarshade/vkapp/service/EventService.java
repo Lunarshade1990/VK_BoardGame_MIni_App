@@ -6,12 +6,14 @@ import com.lunarshade.vkapp.entity.*;
 import com.lunarshade.vkapp.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EventService {
 
     private final UserRepository userRepository;
@@ -21,6 +23,7 @@ public class EventService {
     private final EventRepository eventRepository;
     private final PlayRepository playRepository;
 
+    @Transactional
     public Event saveNewEvent(GameEventRqDto gameEventRqDto) {
         PlayRqDto playRqDto = gameEventRqDto
                 .tables().get(0)
@@ -31,7 +34,10 @@ public class EventService {
         AppUser host = userRepository.findById(playRqDto.host()).get();
         Place place = placeRepository.findById(gameEventRqDto.place()).get();
         Desk eventDesk = getDeskForEvent(gameEventRqDto, place);
+
         Event event = new Event();
+        event = eventRepository.save(event);
+
         event.setPlace(place);
         event.setCreator(creator);
         fillPlayInfo(play, playRqDto, boardGame, host, eventDesk);
@@ -39,12 +45,13 @@ public class EventService {
         event.getPlays().add(play);
         setEventStartAndEndDates(event);
         event.setLastUpdateTime(event.getStartDate());
-        event = eventRepository.save(event);
         return event;
     }
 
+    @Transactional
     public Play addNewPlay(Event event, PlayRqDto playRqDto) {
         Play play = new Play();
+        playRepository.save(play);
         BoardGame boardGame = boardGameRepository.findById(playRqDto.game()).get();
         AppUser host = userRepository.findById(playRqDto.host()).get();
         Desk desk = deskRepository.findById(playRqDto.tableId()).get();
@@ -110,11 +117,13 @@ public class EventService {
         desk.getPlays().add(play);
     }
 
+    @Transactional
     public void setEventLastUpdateTime(Event event, Date date) {
         event.setLastUpdateTime(date);
         eventRepository.save(event);
     }
 
+    @Transactional
     public void addNewUser(Play play, AppUser user) throws Exception {
         if (play.haveSeats()) {
             user.getPlays().add(play);
@@ -123,6 +132,7 @@ public class EventService {
         } else throw new Exception("Нет свободных мест");
     }
 
+    @Transactional
     public void addNewVirtualUser(Play play, String user) throws Exception {
         if (play.haveSeats()) {
             play.getVirtualUsers().add(user);
@@ -154,7 +164,8 @@ public class EventService {
         }
     }
 
-    private Desk getVirtualDeskForPlace(Place place) {
+    @Transactional
+    public Desk getVirtualDeskForPlace(Place place) {
         Desk desk = new Desk();
         desk.setDeskType(DeskType.VIRTUAL);
         desk.setPlace(place);

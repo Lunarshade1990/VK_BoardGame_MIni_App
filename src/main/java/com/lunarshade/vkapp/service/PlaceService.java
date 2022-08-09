@@ -10,11 +10,13 @@ import com.lunarshade.vkapp.repository.UserRepository;
 import com.lunarshade.vkapp.service.exceptions.ObjectExistsException;
 import lombok.Data;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 @Data
 @Service
+@Transactional(readOnly = true)
 public class PlaceService {
 
     private final PlaceInfoRepository placeInfoRepository;
@@ -43,23 +45,22 @@ public class PlaceService {
         return placeInfoRepository.getAllByPublicPlaceIsTrue();
     }
 
+    @Transactional
     public Place savePlace(PlaceRequest placeForm) throws ObjectExistsException {
         AppUser user = userRepository.getById(placeForm.userId());
         Set<Place> places = user.getPlaces();
         checkIfPlaceExists(placeForm, places);
-        Place place = createNewPlace(user, placeForm);
-        place = placeInfoRepository.save(place);
-        userRepository.save(user);
-        return place;
+        return createNewPlace(user, placeForm);
     }
 
     public Set<DeskInfo> getPlaceDesks(Place place) {
-        Set<DeskInfo> deskInfos = deskRepository.getAllByPlace(place);
-        return deskInfos;
+        return deskRepository.getAllByPlace(place);
     }
 
-    private Place createNewPlace(AppUser user, PlaceRequest form) {
+    @Transactional
+    public Place createNewPlace(AppUser user, PlaceRequest form) {
         Place place = new Place();
+        placeInfoRepository.save(place);
         place.setAddress(form.address());
         place.setPublicPlace(form.publicPlace());
         place.setHome(form.home());
@@ -73,26 +74,24 @@ public class PlaceService {
         return place;
     }
 
-    private void checkIfPlaceExists(PlaceRequest placeForm, Set<Place> places) throws ObjectExistsException {
+    public void checkIfPlaceExists(PlaceRequest placeForm, Set<Place> places) throws ObjectExistsException {
         boolean isAddrExist;
         if (!places.isEmpty()) {
             if (placeForm.publicPlace()) isAddrExist = isPublicPlaceExist(placeForm, places);
             else isAddrExist = isUserAddrExist(placeForm, places);
             if (isAddrExist) {
                 throw new ObjectExistsException("Такой адрес уже есть у пользователя");
-            };
+            }
         }
     }
 
-    private boolean isUserAddrExist(PlaceRequest placeForm, Set<Place> places) {
-        boolean isAddrExist = places.stream()
+    public boolean isUserAddrExist(PlaceRequest placeForm, Set<Place> places) {
+        return places.stream()
                 .anyMatch(p -> p.getAddress().equals(placeForm.address()));
-        return isAddrExist;
     }
 
-    private boolean isPublicPlaceExist(PlaceRequest placeForm, Set<Place> places) {
-        boolean isAddrExist = places.stream()
+    public boolean isPublicPlaceExist(PlaceRequest placeForm, Set<Place> places) {
+        return places.stream()
                 .anyMatch(p -> p.getAddress().equals(placeForm.address()) && p.getName().equals(placeForm.name()));
-        return isAddrExist;
     }
 }

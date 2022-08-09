@@ -3,7 +3,6 @@ package com.lunarshade.vkapp.service;
 import com.lunarshade.vkapp.dao.BoardGameDao;
 import com.lunarshade.vkapp.dao.request.BoardGameFilter;
 import com.lunarshade.vkapp.entity.*;
-import com.lunarshade.vkapp.repository.BoardGameRepository;
 import com.lunarshade.vkapp.repository.response.PageResponse;
 import com.lunarshade.vkapp.repository.util.QPredicates;
 import com.querydsl.core.types.ExpressionUtils;
@@ -12,18 +11,19 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BoardGameService {
 
-    private final BoardGameRepository boardGameRepository;
     private final EntityManager em;
 
-
+    @Transactional
     public PageResponse<BoardGameDao> getBoardGamesByOwnerAndCollectionTypeWithFilter(Long userId,
                                                                                       CollectionType type,
                                                                                       BoardGameFilter filter,

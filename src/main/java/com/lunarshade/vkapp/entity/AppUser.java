@@ -47,11 +47,8 @@ public class AppUser {
 
     private boolean active;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
+    @ManyToOne
     private City city;
-
-
 
     @Override
     public boolean equals(Object o) {
